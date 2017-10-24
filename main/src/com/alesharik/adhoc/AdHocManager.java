@@ -8,9 +8,9 @@ import java.util.UUID;
 public final class AdHocManager {
     private AdHocManager() { }
 
-    static native HResult commit(AdHocNetwork network, boolean saveProfile, boolean userSpecific);
+    public static native AdHocNetwork commit(AdHocNetwork network, boolean saveProfile, boolean userSpecific);
 
-    static native AdHocNetwork createNetwork(String name, String password, long geoId, AdHocInterface adHocInterface, SecuritySettings securitySettings, UUID contextGuid);
+    public static native AdHocNetwork createNetwork(String name, String password, long geoId, AdHocInterface adHocInterface, SecuritySettings securitySettings, UUID contextGuid);
 
     public static native List<AdHocInterface> getInterfaces();
 
@@ -25,7 +25,7 @@ public final class AdHocManager {
     public interface Sink {
         void onInterfaceAdded(AdHocInterface adHocInterface);
 
-        void onIterfaceremoved(UUID id);
+        void onInterfaceRemoved(UUID id);
 
         void onNetworkAdded(AdHocNetwork network);
 

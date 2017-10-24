@@ -18,7 +18,7 @@ public final class AdHocInterface {
 
     public native UUID getDeviceSignature();
 
-    public native String getFirendlyName();
+    public native String getFriendlyName();
 
     public native List<AdHocNetwork> getNetworks();
 
