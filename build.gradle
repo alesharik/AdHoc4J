@@ -3,7 +3,16 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 
+def NATIVE_GROUP = "native"
 sourceCompatibility = 1.8
+def nativesSrc = "compile/com/alesharik/adhoc"
+def nativeClasses = new ArrayList<String>()
+nativeClasses.add("com.alesharik.adhoc.AdHocNetwork")
+nativeClasses.add("com.alesharik.adhoc.AdHocInterface")
+nativeClasses.add("com.alesharik.adhoc.AdHocManager")
+
+buildDir = new File('./out/')
+def nativeLibsDir = new File('./out/nativeLibs')
 
 repositories {
     mavenCentral()
@@ -19,4 +28,66 @@ sourceSets {
             srcDir 'main/src'
         }
     }
+}
+
+task generateJavaHeaders(dependsOn: compileJava, type: Exec) {
+    group = NATIVE_GROUP
+
+    def classesDir = sourceSets.main.output.classesDirs[0]
+
+    def classpath = ""
+    sourceSets.main.output.classesDirs.forEach({
+        if(!classpath.empty)
+            classpath += ":"
+        classpath += it.toString()
+    })
+
+    workingDir classesDir
+    executable "${System.properties["java.home"]}/../bin/javah"
+    args "-d", classesDir.toString() + '/' + nativesSrc
+    args "-classpath", classpath
+    doFirst {
+        nativeClasses.forEach{ clazz -> args clazz }
+    }
+
+    errorOutput = System.out
+}
+
+task copyNativeDir(dependsOn: compileJava, type: Copy) {
+    group = NATIVE_GROUP
+
+    from './' + nativesSrc
+    into sourceSets.main.output.classesDir.toString() + '/' + nativesSrc
+}
+
+task executeCmake(dependsOn: [copyNativeDir], type: Exec) {
+    group = NATIVE_GROUP
+
+    workingDir sourceSets.main.output.classesDir.toString() + '/' + nativesSrc
+    commandLine 'cmake', '.'
+
+    errorOutput = System.out
+}
+
+task makeNatives(dependsOn: executeCmake, type: Exec) {
+    group = NATIVE_GROUP
+
+    workingDir sourceSets.main.output.classesDirs[0].toString() + '/' + nativesSrc
+
+    commandLine "make"
+
+    errorOutput = System.out
+}
+
+task copyNatives(dependsOn: makeNatives, type: Copy) {
+    group = NATIVE_GROUP
+
+    sourceSets.main.output.classesDirs.forEach({
+        from(it.toString() + '/' + nativesSrc) {
+            include '**/*.so'
+            include '**/*.dll'
+        }
+    })
+    includeEmptyDirs = false
+    into nativeLibsDir.toString()
 }

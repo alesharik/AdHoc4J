@@ -7,8 +7,10 @@ import java.util.UUID;
 
 public final class AdHocNetwork {
     private volatile long pointer;
-    public AdHocNetwork(UUID sig) {
-        init(sig);
+
+    AdHocNetwork(long pointer) {
+        this.pointer = pointer;
+        init();
         Cleaner.create(this, this::clean);
     }
 
@@ -18,7 +20,7 @@ public final class AdHocNetwork {
 
     public native void disconnect();
 
-    public native UUID getContextGuid();
+    public native Guid getContextGuid();
 
     public native AdHocInterface getInterface();
 
@@ -28,7 +30,7 @@ public final class AdHocNetwork {
 
     public native SignalQuality getSignalQuality();
 
-    public native UUID getSignature();
+    public native Guid getSignature();
 
     public native String getSSID();
 
@@ -40,7 +42,7 @@ public final class AdHocNetwork {
 
     public native void unregisterSink(Sink sink);
 
-    private native void init(UUID signature);
+    private native void init();
 
     private native void clean();
 

@@ -1,2 +1,7 @@
 .gradle
 .idea
+out
+*.user
+*.autosave
+*.h
+build-*

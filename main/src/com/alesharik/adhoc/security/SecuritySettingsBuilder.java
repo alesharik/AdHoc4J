@@ -15,6 +15,6 @@ public final class SecuritySettingsBuilder {
     }
 
     public SecuritySettings createSecuritySettings() {
-        return new SecuritySettings(authAlgorithm, cipherAlgorithm);
+        return new SecuritySettings(pointer, authAlgorithm, cipherAlgorithm);
     }
 }
