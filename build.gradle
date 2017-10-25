@@ -29,6 +29,11 @@ sourceSets {
             srcDir 'main/src'
         }
     }
+    test {
+        java {
+            srcDir 'test/src'
+        }
+    }
 }
 
 task generateJavaHeaders(dependsOn: compileJava, type: Exec) {

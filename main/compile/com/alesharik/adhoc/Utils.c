@@ -32,7 +32,7 @@ IDot11AdHocNetwork *getNetwork(JNIEnv *env, jobject obj) {
     return (IDot11AdHocNetwork*) getObjectPointer(env, obj);
 }
 
-GUID getGuid(JNIEnv *env, jobject obj) {
+GUID getGuid(JNIEnv *env, jobject obj) {//FIXME rewrite!
     GUID guid;
     jclass clazz = env->GetObjectClass(obj);
     guid.Data1 = env->GetLongField(obj, env->GetFieldID(clazz, "dword", "L"));
