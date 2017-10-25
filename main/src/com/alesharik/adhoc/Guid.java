@@ -10,7 +10,7 @@ public class Guid {
     protected short word1;
     protected short word2;
     /**
-     * 4 elements
+     * 8 elements
      */
     protected char[] data;
 

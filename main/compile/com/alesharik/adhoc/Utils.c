@@ -40,7 +40,7 @@ GUID getGuid(JNIEnv *env, jobject obj) {
     guid.Data3 = env->GetShortField(obj, env->GetFieldID(clazz, "word2", "S"));
     jcharArray arr = reinterpret_cast<jcharArray>(env->GetObjectField(obj, env->GetFieldID(clazz, "data", "[D")));
     const char* dat = env->GetCharArrayElements(arr, 0);
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 8; i++) {
         guid.Data4[i] = dat[i];
     }
     env->ReleaseCharArrayElements(arr, dat, 0);
