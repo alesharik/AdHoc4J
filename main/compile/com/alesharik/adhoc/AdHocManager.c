@@ -1,3 +1,6 @@
+#ifndef adhoc4j_AdHocManager
+#define adhoc4j_AdHocManager
+
 #include <jni.h>
 #include <com_alesharik_adhoc_AdHocManager.h>
 #include <adhoc.h>
@@ -6,11 +9,19 @@
 
 static IDot11AdHocManager manager;
 
-/*
- * Class:     com_alesharik_adhoc_AdHocManager
- * Method:    commit
- * Signature: (Lcom/alesharik/adhoc/AdHocNetwork;ZZ)Lcom/alesharik/adhoc/AdHocNetwork;
- */
+jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+    JNIEnv* env;
+    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+        return -1;
+    }
+
+    //FIXME get classes before runtime, use global ref
+    // Get jclass with env->FindClass.
+    // Register methods with env->RegisterNatives.
+
+    return JNI_VERSION_1_6;//TODO check
+}
+
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_commit(JNIEnv *env, jclass clazz, jobject network, jboolean saveNetwork, jboolean userSpecific) {
     jclass clz = env->GetObjectClass(network);
     jfieldID f = env->GetFieldID(clz, "pointer", "L");
@@ -23,11 +34,6 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_commit(JNIEnv *e
     return network;
 }
 
-/*
- * Class:     com_alesharik_adhoc_AdHocManager
- * Method:    createNetwork
- * Signature: (Ljava/lang/String;Ljava/lang/String;JLcom/alesharik/adhoc/AdHocInterface;Lcom/alesharik/adhoc/security/SecuritySettings;Ljava/util/UUID;)Lcom/alesharik/adhoc/AdHocNetwork;
- */
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_createNetwork(JNIEnv *env, jclass clazz, jstring name, jstring password, jlong geoId, jobject interface, jobject securitySettings, jobject contextGuid) {
     const char* netName = env->GetStringUTFChars(name, 0);
     const char* pass = env->GetStringUTFChars(password, 0);
@@ -44,42 +50,20 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_createNetwork(JN
     return createNetwork(env, *network);
 }
 
-/*
- * Class:     com_alesharik_adhoc_AdHocManager
- * Method:    getInterfaces
- * Signature: ()Ljava/util/List;
- */
-JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getInterfaces
-  (JNIEnv *, jclass);
+JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getInterfaces(JNIEnv *env, jclass clazz) {
+}
 
-/*
- * Class:     com_alesharik_adhoc_AdHocManager
- * Method:    getNetworks
- * Signature: ()Ljava/util/List;
- */
-JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getNetworks
-  (JNIEnv *, jclass);
+JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getNetworks(JNIEnv *env, jclass clazz) {
+}
 
-/*
- * Class:     com_alesharik_adhoc_AdHocManager
- * Method:    getNetwork
- * Signature: (Ljava/util/UUID;)Lcom/alesharik/adhoc/AdHocNetwork;
- */
-JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getNetwork
-  (JNIEnv *, jclass, jobject);
+JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getNetwork(JNIEnv *env, jclass clazz, jobject guid) {
 
-/*
- * Class:     com_alesharik_adhoc_AdHocManager
- * Method:    registerSink
- * Signature: (Lcom/alesharik/adhoc/AdHocManager/Sink;)V
- */
-JNIEXPORT void JNICALL Java_com_alesharik_adhoc_AdHocManager_registerSink
-  (JNIEnv *, jclass, jobject);
+}
 
-/*
- * Class:     com_alesharik_adhoc_AdHocManager
- * Method:    unregisterSink
- * Signature: (Lcom/alesharik/adhoc/AdHocManager/Sink;)V
- */
-JNIEXPORT void JNICALL Java_com_alesharik_adhoc_AdHocManager_unregisterSink
-  (JNIEnv *, jclass, jobject);
+JNIEXPORT void JNICALL Java_com_alesharik_adhoc_AdHocManager_registerSink(JNIEnv *env, jclass clazz, jobject sink) {
+}
+
+JNIEXPORT void JNICALL Java_com_alesharik_adhoc_AdHocManager_unregisterSink(JNIEnv *env, jclass clazz, jobject sink) {
+}
+
+#endif
