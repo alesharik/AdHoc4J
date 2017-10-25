@@ -1,23 +1,20 @@
 package com.alesharik.adhoc.security;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * This class represents cipher algorithm for secured AdHoc network
  */
+@AllArgsConstructor
 public enum CipherAlgorithm {
     INVALID(-1),
-    NONE(0),
-    CCMP(4),
-    WEP(101);
+    NONE(0x00),
+    CCMP(0x04),
+    WEP(0x101);
 
+    @Getter
     private final int type;
-
-    CipherAlgorithm(int type) {
-        this.type = type;
-    }
-
-    public int getType() {
-        return type;
-    }
 
     public static CipherAlgorithm getAlgorithm(int type) {
         for (CipherAlgorithm cipherAlgorithm : values()) {

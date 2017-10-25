@@ -1,6 +1,7 @@
 package com.alesharik.adhoc.security;
 
 import com.alesharik.adhoc.AdHocInterface;
+import lombok.Getter;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -11,10 +12,14 @@ import javax.annotation.Nullable;
 public final class SecuritySettings {
     private final long pointer;
 
+    @Getter
+    @Nonnull
     private final AuthAlgorithm authAlgorithm;
+    @Getter
+    @Nonnull
     private final CipherAlgorithm cipherAlgorithm;
 
-    public SecuritySettings(long pointer, AuthAlgorithm authAlgorithm, CipherAlgorithm cipherAlgorithm) {
+    public SecuritySettings(long pointer, @Nonnull AuthAlgorithm authAlgorithm, @Nonnull CipherAlgorithm cipherAlgorithm) {
         this.pointer = pointer;
         this.authAlgorithm = authAlgorithm;
         this.cipherAlgorithm = cipherAlgorithm;
@@ -27,15 +32,5 @@ public final class SecuritySettings {
                 return securitySettings;
         }
         return null;
-    }
-
-    @Nonnull
-    public AuthAlgorithm getAuthAlgorithm() {
-        return authAlgorithm;
-    }
-
-    @Nonnull
-    public CipherAlgorithm getCipherAlgorithm() {
-        return cipherAlgorithm;
     }
 }

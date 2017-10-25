@@ -1,11 +1,16 @@
 package com.alesharik.adhoc;
 
-import java.util.Arrays;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+
 import java.util.UUID;
 
 /**
  * Like {@link java.util.UUID}, but for Windows
  */
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
 public class Guid {
     protected int dword;
     protected short word1;
@@ -14,13 +19,6 @@ public class Guid {
      * 8 elements
      */
     protected byte[] data;
-
-    protected Guid(int dword, short word1, short word2, byte[] data) {
-        this.dword = dword;
-        this.word1 = word1;
-        this.word2 = word2;
-        this.data = data;
-    }
 
     public static Guid fromUUID(UUID uuid) {
         return new Guid(
@@ -67,24 +65,5 @@ public class Guid {
 
     public static Guid randomGuid() {
         return fromUUID(UUID.randomUUID());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if(!(o instanceof Guid)) return false;
-
-        Guid guid = (Guid) o;
-
-        return dword == guid.dword && word1 == guid.word1 && word2 == guid.word2 && Arrays.equals(data, guid.data);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = dword;
-        result = 31 * result + (int) word1;
-        result = 31 * result + (int) word2;
-        result = 31 * result + Arrays.hashCode(data);
-        return result;
     }
 }

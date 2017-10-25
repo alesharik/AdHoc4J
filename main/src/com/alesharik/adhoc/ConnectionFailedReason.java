@@ -1,20 +1,18 @@
 package com.alesharik.adhoc;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import javax.annotation.Nonnull;
 
+@AllArgsConstructor
 public enum ConnectionFailedReason {
     DOMAIN_MISMATCH(0),
     PASSPHRASE_MISMATCH(1),
     OTHER(2);
+
+    @Getter
     private final int type;
-
-    ConnectionFailedReason(int type) {
-        this.type = type;
-    }
-
-    public int getType() {
-        return type;
-    }
 
     @Nonnull
     public static ConnectionFailedReason getReason(int type) {
