@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public final class AdHocManager {
+    private static volatile ManagerDelegate delegate;//FIXME delegate for testing
+
     private AdHocManager() { }
 
     @Nullable
@@ -35,5 +37,9 @@ public final class AdHocManager {
         void onNetworkAdded(@Nonnull AdHocNetwork network);
 
         void onNetworkRemoved(@Nonnull Guid id);
+    }
+
+    interface ManagerDelegate {
+
     }
 }

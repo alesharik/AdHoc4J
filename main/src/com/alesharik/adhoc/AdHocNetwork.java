@@ -33,6 +33,9 @@ public final class AdHocNetwork {
     @Nonnull
     public native SecuritySettings getSecuritySettings();
 
+    /**
+     * Take {@link SignalQuality} sample
+     */
     @Nonnull
     public native SignalQuality getSignalQuality();
 

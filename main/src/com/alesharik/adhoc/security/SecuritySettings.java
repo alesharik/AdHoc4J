@@ -14,7 +14,7 @@ public final class SecuritySettings {
     private final AuthAlgorithm authAlgorithm;
     private final CipherAlgorithm cipherAlgorithm;
 
-    SecuritySettings(long pointer, AuthAlgorithm authAlgorithm, CipherAlgorithm cipherAlgorithm) {
+    public SecuritySettings(long pointer, AuthAlgorithm authAlgorithm, CipherAlgorithm cipherAlgorithm) {
         this.pointer = pointer;
         this.authAlgorithm = authAlgorithm;
         this.cipherAlgorithm = cipherAlgorithm;
