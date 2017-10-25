@@ -2,7 +2,7 @@
 #define adhoc4j_AdHocManager
 
 #include <jni.h>
-#include <com_alesharik_adhoc_AdHocManager.h>
+#include "com_alesharik_adhoc_AdHocManager.h"
 #include <adhoc.h>
 
 #include "Utils.c"

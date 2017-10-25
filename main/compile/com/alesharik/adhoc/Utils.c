@@ -28,6 +28,10 @@ IDot11AdHocInterface *getInterface(JNIEnv *env, jobject obj) {
     return (IDot11AdHocInterface*) getObjectPointer(env, obj);
 }
 
+IDot11AdHocNetwork *getNetwork(JNIEnv *env, jobject obj) {
+    return (IDot11AdHocNetwork*) getObjectPointer(env, obj);
+}
+
 GUID getGuid(JNIEnv *env, jobject obj) {
     GUID guid;
     jclass clazz = env->GetObjectClass(obj);

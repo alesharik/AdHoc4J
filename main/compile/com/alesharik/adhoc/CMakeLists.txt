@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES Utils.c AdHocManager.c)
+set(SOURCE_FILES Utils.c AdHocManager.c AdHocInterface.c AdHocNetwork.c)
 
 add_library(adhoc4j SHARED ${SOURCE_FILES})
 
