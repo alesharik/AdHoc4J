@@ -2,33 +2,38 @@ package com.alesharik.adhoc;
 
 import com.alesharik.adhoc.security.SecuritySettings;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.UUID;
 
 public final class AdHocManager {
     private AdHocManager() { }
 
-    public static native AdHocNetwork commit(AdHocNetwork network, boolean saveProfile, boolean userSpecific);
+    @Nullable
+    public static native AdHocNetwork commit(@Nonnull AdHocNetwork network, boolean saveProfile, boolean userSpecific);
 
-    public static native AdHocNetwork createNetwork(String name, String password, long geoId, AdHocInterface adHocInterface, SecuritySettings securitySettings, Guid contextGuid);
+    @Nonnull
+    public static native AdHocNetwork createNetwork(@Nonnull String name, @Nonnull String password, long geoId, @Nonnull AdHocInterface adHocInterface, @Nonnull SecuritySettings securitySettings, @Nonnull Guid contextGuid);
 
+    @Nonnull
     public static native List<AdHocInterface> getInterfaces();
 
+    @Nonnull
     public static native List<AdHocNetwork> getNetworks();
 
-    public static native AdHocNetwork getNetwork(Guid signature);
+    public static native AdHocNetwork getNetwork(@Nonnull Guid signature);
 
-    public static native void registerSink(Sink sink);
+    public static native void registerSink(@Nonnull Sink sink);
 
-    public static native void unregisterSink(Sink sink);
+    public static native void unregisterSink(@Nonnull Sink sink);
 
     public interface Sink {
-        void onInterfaceAdded(AdHocInterface adHocInterface);
+        void onInterfaceAdded(@Nonnull AdHocInterface adHocInterface);
 
-        void onInterfaceRemoved(UUID id);
+        void onInterfaceRemoved(@Nonnull Guid id);
 
-        void onNetworkAdded(AdHocNetwork network);
+        void onNetworkAdded(@Nonnull AdHocNetwork network);
 
-        void onNetworkRemoved(UUID id);
+        void onNetworkRemoved(@Nonnull Guid id);
     }
 }

@@ -1,5 +1,7 @@
 package com.alesharik.adhoc;
 
+import javax.annotation.Nonnull;
+
 public enum ConnectionFailedReason {
     DOMAIN_MISMATCH(0),
     PASSPHRASE_MISMATCH(1),
@@ -14,6 +16,7 @@ public enum ConnectionFailedReason {
         return type;
     }
 
+    @Nonnull
     public static ConnectionFailedReason getReason(int type) {
         for (ConnectionFailedReason connectionFailedReason : values()) {
             if(connectionFailedReason.type == type)

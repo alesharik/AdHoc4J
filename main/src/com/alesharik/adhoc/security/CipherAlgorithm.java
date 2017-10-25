@@ -1,5 +1,8 @@
 package com.alesharik.adhoc.security;
 
+/**
+ * This class represents cipher algorithm for secured AdHoc network
+ */
 public enum CipherAlgorithm {
     INVALID(-1),
     NONE(0),

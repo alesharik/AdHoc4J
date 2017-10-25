@@ -3,27 +3,35 @@ package com.alesharik.adhoc;
 import com.alesharik.adhoc.security.SecuritySettings;
 import sun.misc.Cleaner;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.UUID;
 
 public final class AdHocInterface {
     private volatile long pointer;
 
-    public AdHocInterface(UUID signature) {
-        init(signature);
+    AdHocInterface(long pointer) {
+        this.pointer = pointer;
+        init();
         Cleaner.create(this, this::clean);
     }
 
+    @Nullable
     public native AdHocNetwork getActiveNetwork();
 
-    public native UUID getDeviceSignature();
+    @Nonnull
+    public native Guid getDeviceSignature();
 
+    @Nonnull
     public native String getFriendlyName();
 
+    @Nonnull
     public native List<AdHocNetwork> getNetworks();
 
+    @Nonnull
     public native List<SecuritySettings> getSecuritySettings();
 
+    @Nonnull
     public native ConnectionStatus getStatus();
 
     public native boolean isAdHocSupported();
@@ -32,15 +40,15 @@ public final class AdHocInterface {
 
     public native boolean isRadioOn();
 
-    public native void register(Sink sink);
+    public native void register(@Nonnull Sink sink);
 
-    public native void unregister(Sink sink);
+    public native void unregister(@Nonnull Sink sink);
 
     private native void clean();
 
-    private native void init(UUID signature);
+    private native void init();
 
     public interface Sink {
-        void onConnectionStatusChange(ConnectionStatus status);
+        void onConnectionStatusChange(@Nonnull ConnectionStatus status);
     }
 }

@@ -3,7 +3,8 @@ package com.alesharik.adhoc;
 import com.alesharik.adhoc.security.SecuritySettings;
 import sun.misc.Cleaner;
 
-import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class AdHocNetwork {
     private volatile long pointer;
@@ -14,33 +15,41 @@ public final class AdHocNetwork {
         Cleaner.create(this, this::clean);
     }
 
-    public native void connect(String pass, long geoId, boolean saveProfile,  boolean userSpecific);
+    public native void connect(@Nonnull String pass, long geoId, boolean saveProfile,  boolean userSpecific);
 
     public native void deleteProfile();
 
     public native void disconnect();
 
+    @Nonnull
     public native Guid getContextGuid();
 
+    @Nonnull
     public native AdHocInterface getInterface();
 
+    @Nullable
     public native String getProfileName();
 
+    @Nonnull
     public native SecuritySettings getSecuritySettings();
 
+    @Nonnull
     public native SignalQuality getSignalQuality();
 
+    @Nonnull
     public native Guid getSignature();
 
+    @Nullable
     public native String getSSID();
 
+    @Nonnull
     public native ConnectionStatus getStatus();
 
     public native boolean hasProfile();
 
-    public native void registerSink(Sink sink);
+    public native void registerSink(@Nonnull Sink sink);
 
-    public native void unregisterSink(Sink sink);
+    public native void unregisterSink(@Nonnull Sink sink);
 
     private native void init();
 
@@ -65,8 +74,8 @@ public final class AdHocNetwork {
     }
 
     public interface Sink {
-        void onConnectionFail(ConnectionFailedReason reason);
+        void onConnectionFail(@Nonnull ConnectionFailedReason reason);
 
-        void onStatusChange(ConnectionStatus status);
+        void onStatusChange(@Nonnull ConnectionStatus status);
     }
 }

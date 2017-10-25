@@ -1,5 +1,8 @@
 package com.alesharik.adhoc.security;
 
+/**
+ * AdHoc network auth algorithm
+ */
 public enum AuthAlgorithm {
     INVALID(-1),
     OPEN_80211(1),

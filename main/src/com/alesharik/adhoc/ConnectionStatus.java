@@ -1,5 +1,10 @@
 package com.alesharik.adhoc;
 
+import javax.annotation.Nonnull;
+
+/**
+ * Represent connection status
+ */
 public enum ConnectionStatus {
     INVALID(0),
     DISCONNECTED(11),
@@ -17,6 +22,7 @@ public enum ConnectionStatus {
         return type;
     }
 
+    @Nonnull
     public static ConnectionStatus getStatus(int type) {
         for (ConnectionStatus connectionStatus : values()) {
             if(connectionStatus.type == type)
