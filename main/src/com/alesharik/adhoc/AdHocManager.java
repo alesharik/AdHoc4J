@@ -21,7 +21,7 @@ public final class AdHocManager {
     public static native List<AdHocInterface> getInterfaces();
 
     @Nonnull
-    public static native List<AdHocNetwork> getNetworks();
+    public static native List<AdHocNetwork> getNetworks(Guid context);
 
     public static native AdHocNetwork getNetwork(@Nonnull Guid signature);
 

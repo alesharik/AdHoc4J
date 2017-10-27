@@ -63,7 +63,7 @@ task generateJavaHeaders(dependsOn: compileJava, type: Exec) {
 task copyNativeDir(dependsOn: compileJava, type: Copy) {
     group = NATIVE_GROUP
 
-    from './' + nativesSrc
+    from './main/' + nativesSrc
     into sourceSets.main.output.classesDir.toString() + '/' + nativesSrc
 }
 
@@ -71,7 +71,7 @@ task executeCmake(dependsOn: [copyNativeDir], type: Exec) {
     group = NATIVE_GROUP
 
     workingDir sourceSets.main.output.classesDir.toString() + '/' + nativesSrc
-    commandLine 'cmake', '.'
+    commandLine 'cmake', '. -G "MinGW Makefiles"'
 
     errorOutput = System.out
 }

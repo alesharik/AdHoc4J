@@ -9,19 +9,6 @@
 
 static IDot11AdHocManager manager;
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
-    JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
-        return -1;
-    }
-
-    //FIXME get classes before runtime, use global ref
-    // Get jclass with env->FindClass.
-    // Register methods with env->RegisterNatives.
-
-    return JNI_VERSION_1_6;//TODO check
-}
-
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_commit(JNIEnv *env, jclass clazz, jobject network, jboolean saveNetwork, jboolean userSpecific) {
     jclass clz = env->GetObjectClass(network);
     jfieldID f = env->GetFieldID(clz, "pointer", "L");
@@ -51,13 +38,41 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_createNetwork(JN
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getInterfaces(JNIEnv *env, jclass clazz) {
+    jobject list = createList(env);
+    IEnumDot11AdHocInterfaces **nets;
+    handleResult(env, manager.GetIEnumDot11AdHocInterfaces(nets));
+    long *count;
+    IDot11AdHocInterface **netElements;
+    do {
+        nets->Next(1024, netElements, count);
+        for(long i = 0; i < *count, i++) {
+            addObject(env, list, createInterface(env, netElements[i]));
+        }
+    } while(*count == 1024);
+    return list;
 }
 
-JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getNetworks(JNIEnv *env, jclass clazz) {
+JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getNetworks(JNIEnv *env, jclass clazz, jobject guid) {
+    jobject list = createList(env);
+    GUID g = getGuid(env, guid);
+    IEnumDot11AdHocNetworks **nets;
+    handleResult(env, manager.GetIEnumDot11AdHocNetworks(g, nets));
+    long *count;
+    IDot11AdHocNetwork **netElements;
+    do {
+        nets->Next(1024, netElements, count);
+        for(long i = 0; i < *count, i++) {
+            addObject(env, list, createNetwork(env, netElements[i]));
+        }
+    } while(*count == 1024);
+    return list;
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_getNetwork(JNIEnv *env, jclass clazz, jobject guid) {
-
+    IDot11AdHocNetwork **net;
+    GUID g = getGuid(env, guid);
+    manager.GetNetwork(&g, net);
+    return createNetwork(env, *net);
 }
 
 JNIEXPORT void JNICALL Java_com_alesharik_adhoc_AdHocManager_registerSink(JNIEnv *env, jclass clazz, jobject sink) {
