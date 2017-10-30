@@ -1,7 +1,6 @@
 #ifndef adhoc4j_AdHocInterface
 #define adhoc4j_AdHocInterface
 
-#include <jni.h>
 #include "com_alesharik_adhoc_AdHocInterface.h"
 #include <adhoc.h>
 
@@ -22,7 +21,7 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocInterface_getDeviceSigna
 JNIEXPORT jstring JNICALL Java_com_alesharik_adhoc_AdHocInterface_getFriendlyName(JNIEnv *env, jobject obj) {
     char **str;
     handleResult(env, getInterface(env, obj)->GetFriendlyName(str));
-    return env->NewStringUTF(*str);
+    return (*env)->NewStringUTF(env, *str);
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocInterface_getNetworks(JNIEnv *env, jobject obj) {
@@ -33,7 +32,7 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocInterface_getNetworks(JN
     IDot11AdHocNetwork **netElements;
     do {
         nets->Next(1024, netElements, count);
-        for(long i = 0; i < *count, i++) {
+        for(long i = 0; i < *count; i++) {
             addObject(env, list, createNetwork(env, netElements[i]));
         }
     } while(*count == 1024);
@@ -48,7 +47,7 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocInterface_getSecuritySet
     IDot11AdHocSecuritySettings **netElements;
     do {
         nets->Next(1024, netElements, count);
-        for(long i = 0; i < *count, i++) {
+        for(long i = 0; i < *count; i++) {
             addObject(env, list, createSecuritySettings(env, netElements[i]));
         }
     } while(*count == 1024);

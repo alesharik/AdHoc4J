@@ -1,18 +1,18 @@
 #ifndef adhoc4j_AdHocNetwork
 #define adhoc4j_AdHocNetwork
 
-#include <jni.h>
 #include "com_alesharik_adhoc_AdHocNetwork.h"
 #include <adhoc.h>
 
 #include "Utils.c"
 
 JNIEXPORT void JNICALL Java_com_alesharik_adhoc_AdHocNetwork_connect(JNIEnv *env, jobject obj, jstring pass, jlong geoId, jboolean saveProfile, jboolean userSpecific) {
-    IDot11AdHocNetwork net = getNetwork(env, obj);
-    const char* data = env->GetStringUTFChars(pass, 0);
-    handleResult(env, net.Connect(data, geoId, saveProfile, userSpecific));
+    IDot11AdHocNetwork *net = getNetwork(env, obj);
+    const char* data = (*env)->GetStringUTFChars(env, pass, 0);
+    HRESULT hresult = net->Connect(data, geoId, saveProfile, userSpecific);
 
-    env->ReleaseStringUTFChars(pass, data);//FIXME move
+    (*env)->ReleaseStringUTFChars(env, pass, data);
+    handleResult(env, hresult);
 }
 
 JNIEXPORT void JNICALL Java_com_alesharik_adhoc_AdHocNetwork_deleteProfile(JNIEnv *env, jobject obj) {
@@ -38,7 +38,7 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getInterface(JNI
 JNIEXPORT jstring JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getProfileName(JNIEnv *env, jobject obj) {
     char **str;
     handleResult(env, getNetwork(env, obj)->GetProfileName(str));
-    return env->NewStringUTF(*str);
+    return (*env)->NewStringUTF(env, *str);
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getSecuritySettings(JNIEnv *env, jobject obj) {
@@ -63,7 +63,7 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getSignature(JNI
 JNIEXPORT jstring JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getSSID(JNIEnv *env, jobject obj) {
     char **str;
     handleResult(env, getNetwork(env, obj)->GetSSID(str));
-    return env->NewStringUTF(*str);
+    return (*env)->NewStringUTF(env, *str);
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getStatus(JNIEnv *env, jobject obj) {

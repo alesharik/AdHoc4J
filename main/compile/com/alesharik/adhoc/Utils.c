@@ -39,82 +39,96 @@ static jclass listClass;
 static jmethodID listCtor;
 static jmethodID listAddMethod;
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
-    JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
+jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+    JNIEnv *env;
+    if ((*vm)->GetEnv(vm, (void **)(&env), JNI_VERSION_1_6) != JNI_OK) {
         return -1;
     }
 
-    jclass guid = env->FindClass("com/alesharik/adhoc/Guid");
-    guidClass = env->NewGlobalRef(guid);
-    guidClassCtor = env->GetMethodID(guidClass, "<init>", "(ISS[B])V");
+    jclass guid = (*env)->FindClass(env, "com/alesharik/adhoc/Guid");
+    guidClass = (*env)->NewGlobalRef(env, guid);
+    guidClassCtor = (*env)->GetMethodID(env, guidClass, "<init>", "(ISS[B])V");
 
-    jclass cipher = env->FindClass("com/alesharik/adhoc/security/CipherAlgorithm");
-    cipherAlogrithmClass = env->NewGlobalRef(cipher);
+    jclass cipher = (*env)->FindClass(env, "com/alesharik/adhoc/security/CipherAlgorithm");
+    cipherAlogrithmClass = (*env)->NewGlobalRef(env, cipher);
 
-    parseCipherAlgorithmMethod = env->GetMethodID(cipherAlogrithmClass, "getAlgorithm", "(I)Lcom/alesharik/adhoc/security/CipherAlgorithm;");
-    getCipherAlgorithmMethod = env->GetMethodID(cipherAlogrithmClass, "getType", "()I");
+    parseCipherAlgorithmMethod = (*env)->GetMethodID(env, cipherAlogrithmClass, "getAlgorithm",
+                                                  "(I)Lcom/alesharik/adhoc/security/CipherAlgorithm;");
+    getCipherAlgorithmMethod = (*env)->GetMethodID(env, cipherAlogrithmClass, "getType", "()I");
 
-    jclass auth = env->FindClass("com/alesharik/adhoc/security/AuthAlgorithm");
-    authAlogrithmClass = env->NewGlobalRef(auth);
+    jclass auth = (*env)->FindClass(env, "com/alesharik/adhoc/security/AuthAlgorithm");
+    authAlogrithmClass = (*env)->NewGlobalRef(env, auth);
 
-    parseAuthAlgorithmMethod = env->GetMethodID(authAlogrithmClass, "getAlgorithm", "(I)Lcom/alesharik/adhoc/security/CipherAlgorithm;");
-    getAuthAlgorithmMethod = env->GetMethodID(authAlogrithmClass, "getType", "()I");
+    parseAuthAlgorithmMethod = (*env)->GetMethodID(env, authAlogrithmClass, "getAlgorithm",
+                                                "(I)Lcom/alesharik/adhoc/security/CipherAlgorithm;");
+    getAuthAlgorithmMethod = (*env)->GetMethodID(env, authAlogrithmClass, "getType", "()I");
 
-    jclass security = env->FindClass("com/alesharik/adhoc/security/SecuritySettings");
-    securitySettingsClass = env->NewGlobalRef(security);
+    jclass security = (*env)->FindClass(env, "com/alesharik/adhoc/security/SecuritySettings");
+    securitySettingsClass = (*env)->NewGlobalRef(env, security);
 
-    securitySettingsCtor = env->GetMethodID(securitySettingsClass, "<init>", "(JLcom/alesharik/adhoc/security/CipherAlgorithm;Lcom/alesharik/adhoc/security/CipherAlgorithm;)V");
+    securitySettingsCtor = (*env)->GetMethodID(env, securitySettingsClass, "<init>",
+                                            "(JLcom/alesharik/adhoc/security/CipherAlgorithm;Lcom/alesharik/adhoc/security/CipherAlgorithm;)V");
 
-    jclass signal = env->FindClass("com/alesharik/adhoc/AdHocNetwork$SignalQuality");
-    signalQualityClass = env->NewGlobalRef(signal);
+    jclass signal = (*env)->FindClass(env, "com/alesharik/adhoc/AdHocNetwork$SignalQuality");
+    signalQualityClass = (*env)->NewGlobalRef(env, signal);
 
-    signalQualityClassCtor = env->GetMethodID(signalQualityClass, "<init>", "(JJ)V");
+    signalQualityClassCtor = (*env)->GetMethodID(env, signalQualityClass, "<init>", "(JJ)V");
 
-    jclass failReason = env->FindClass("com/alesharik/adhoc/ConnectionFailedReason");
-    failReasonClass = env->NewGlobalRef(failReason);
-    parseFailReasonMethod = env->GetMethodID(failReasonClass, "getReason", "(I)Lcom/alesharik/adhoc/ConnectionFailedReason;");
-    getFailReasonMethod = env->GetMethodID(failReasonClass, "getType", "()I");
+    jclass failReason = (*env)->FindClass(env, "com/alesharik/adhoc/ConnectionFailedReason");
+    failReasonClass = (*env)->NewGlobalRef(env, failReason);
+    parseFailReasonMethod = (*env)->GetMethodID(env, failReasonClass, "getReason",
+                                             "(I)Lcom/alesharik/adhoc/ConnectionFailedReason;");
+    getFailReasonMethod = (*env)->GetMethodID(env, failReasonClass, "getType", "()I");
 
-    jclass connectionStatus = env->FindClass("com/alesharik/adhoc/ConnectionFailedReason");
-    connectionStatusClass = env->NewGlobalRef(connectionStatus);
-    parseConnectionStatusMethod = env->GetMethodID(connectionStatusClass, "getReason", "(I)Lcom/alesharik/adhoc/ConnectionStatus;");
-    getConnectionStatusMethod = env->GetMethodID(connectionStatusClass, "getType", "()I");
+    jclass connectionStatus = (*env)->FindClass(env, "com/alesharik/adhoc/ConnectionFailedReason");
+    connectionStatusClass = (*env)->NewGlobalRef(env, connectionStatus);
+    parseConnectionStatusMethod = (*env)->GetMethodID(env, connectionStatusClass, "getReason",
+                                                   "(I)Lcom/alesharik/adhoc/ConnectionStatus;");
+    getConnectionStatusMethod = (*env)->GetMethodID(env, connectionStatusClass, "getType", "()I");
 
-    jclass inter = env->FindClass("com/alesharik/adhoc/AdHocInterface");
-    interfaceClass = env->NewGlobalRef(inter);
-    interfaceCtor = env->GetMethodID(interfaceClass, "<init>", "(J)V");
+    jclass inter = (*env)->FindClass(env, "com/alesharik/adhoc/AdHocInterface");
+    interfaceClass = (*env)->NewGlobalRef(env, inter);
+    interfaceCtor = (*env)->GetMethodID(env, interfaceClass, "<init>", "(J)V");
 
-    jclass net = env->FindClass("com/alesharik/adhoc/AdHocNetwork");
-    networkClass = env->NewGlobalRef(net);
-    networkCtor = env->GetMethodID(networkClass, "<init>", "(J)V");
+    jclass net = (*env)->FindClass(env, "com/alesharik/adhoc/AdHocNetwork");
+    networkClass = (*env)->NewGlobalRef(env, net);
+    networkCtor = (*env)->GetMethodID(env, networkClass, "<init>", "(J)V");
 
-    jclass list = env->FindClass("java/util/ArrayList");
-    listClass = env->NewGlobalRef(list);
-    listCtor = env->GetMethodID(listClass, "<init>", "()V");
-    listAddMethod = env->GetMethodID(listClass, "add", "(Ljava/lang/Object;)Z");
+    jclass list = (*env)->FindClass(env, "java/util/ArrayList");
+    listClass = (*env)->NewGlobalRef(env, list);
+    listCtor = (*env)->GetMethodID(env, listClass, "<init>", "()V");
+    listAddMethod = (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
 
     return JNI_VERSION_1_8;
 }
 
-void handleResult(JNIEnv *env, HRESULT result) {
-    if(result == S_OK) {
-        return;
-    } else {
-        jclass except = env->FindClass("java/lang/IllegalStateExcpetion");
-        char str[21];
-        sprintf(&str, "%d", result);
-        env->ThrowNew(except, str);
+BOOLEAN handleResult(JNIEnv *env, HRESULT result) {
+    if (result == S_OK) {
+        return 1;
     }
+
+    jclass except = (*env)->FindClass(env, "java/lang/IllegalStateException");
+    char str[21];
+    sprintf((char *) &str, "%d", (int) result);
+    (*env)->ThrowNew(env, except, str);
+    return 0;
 }
 
 long getObjectPointer(JNIEnv *env, jobject obj) {
-    jfieldID id = env->GetFieldID(env->GetObjectClass(obj), "pointer", "J");
-    return env->GetLongField(obj, id);
+    jfieldID id = (*env)->GetFieldID(env, (*env)->GetObjectClass(env, obj), "pointer", "J");
+    return (*env)->GetLongField(env, obj, id);
 }
 
 IDot11AdHocSecuritySettings *getSettings(JNIEnv *env, jobject obj) {
-    return (IDot11AdHocSecuritySettings*)getObjectPointer(env, obj);
+    return (IDot11AdHocSecuritySettings *) getObjectPointer(env, obj);
+}
+
+jobject createCipherAlgorithm(JNIEnv *env, DOT11_ADHOC_CIPHER_ALGORITHM algo) {
+    return (*env)->CallStaticObjectMethod(env, cipherAlogrithmClass, parseCipherAlgorithmMethod, (jint) algo);
+}
+
+jobject createAuthAlgorithm(JNIEnv *env, DOT11_ADHOC_AUTH_ALGORITHM algo) {
+    return (*env)->CallStaticObjectMethod(env, authAlogrithmClass, parseAuthAlgorithmMethod, (jint) algo);
 }
 
 jobject createSecuritySettings(JNIEnv *env, IDot11AdHocSecuritySettings *settings) {
@@ -122,92 +136,85 @@ jobject createSecuritySettings(JNIEnv *env, IDot11AdHocSecuritySettings *setting
     handleResult(env, settings->GetDot11AuthAlgorithm(alg));
     DOT11_ADHOC_CIPHER_ALGORITHM *cipher;
     handleResult(env, settings->GetDot11CipherAlgorithm(cipher));
-    return env->NewObject(securitySettingsClass, securitySettingsCtor, (jlong) settings, createAuthAlgorithm(env, *alg), createCipherAlgorithm(env, *cipher));
+    return (*env)->NewObject(env, securitySettingsClass, securitySettingsCtor, (jlong) settings, createAuthAlgorithm(env, *alg),
+                          createCipherAlgorithm(env, *cipher));
 }
 
 IDot11AdHocInterface *getInterface(JNIEnv *env, jobject obj) {
-    return (IDot11AdHocInterface*) getObjectPointer(env, obj);
+    return (IDot11AdHocInterface *) getObjectPointer(env, obj);
 }
 
 jobject createInterface(JNIEnv *env, IDot11AdHocInterface *i) {
-    return env->NewObject(interfaceClass, interfaceCtor, (jlong) i);
+    return (*env)->NewObject(env, interfaceClass, interfaceCtor, (jlong) i);
 }
 
 IDot11AdHocNetwork *getNetwork(JNIEnv *env, jobject obj) {
-    return (IDot11AdHocNetwork*) getObjectPointer(env, obj);
+    return (IDot11AdHocNetwork *) getObjectPointer(env, obj);
 }
 
 GUID getGuid(JNIEnv *env, jobject obj) {
     GUID guid;
-    jclass clazz = env->GetObjectClass(obj);
-    guid.Data1 = env->GetIntField(obj, env->GetFieldID(clazz, "dword", "I"));
-    guid.Data2 = env->GetShortField(obj, env->GetFieldID(clazz, "word1", "S"));
-    guid.Data3 = env->GetShortField(obj, env->GetFieldID(clazz, "word2", "S"));
-    jbyteArray arr = reinterpret_cast<jbyteArray>(env->GetObjectField(obj, env->GetFieldID(clazz, "data", "[B")));
-    const jbyte* dat = env->GetByteArrayElements(arr, 0);
-    for(int i = 0; i < 8; i++) {
-        guid.Data4[i] = dat[i];
+    jclass clazz = (*env)->GetObjectClass(env, obj);
+    guid.Data1 = (unsigned long) (*env)->GetIntField(env, obj, (*env)->GetFieldID(env, clazz, "dword", "I"));
+    guid.Data2 = (unsigned short) (*env)->GetShortField(env, obj, (*env)->GetFieldID(env, clazz, "word1", "S"));
+    guid.Data3 = (unsigned short) (*env)->GetShortField(env, obj, (*env)->GetFieldID(env, clazz, "word2", "S"));
+    jbyteArray arr = (jbyteArray)((*env)->GetObjectField(env, obj, (*env)->GetFieldID(env, clazz, "data", "[B")));
+    const jbyte *dat = (*env)->GetByteArrayElements(env, arr, 0);
+    for (int i = 0; i < 8; i++) {
+        guid.Data4[i] = (unsigned char) dat[i];
     }
-    env->ReleaseByteArrayElements(arr, dat, 0);
+    (*env)->ReleaseByteArrayElements(env, arr, (jbyte *) dat, 0);
     return guid;
 }
 
 jobject createGuid(JNIEnv *env, GUID obj) {
-    jbyteArray arr = env->NewByteArray(8);
-    jbyte *elem = env->GetByteArrayElements(arr, 0);
-    for(int i = 0; i < 8; i++) {
+    jbyteArray arr = (*env)->NewByteArray(env, 8);
+    jbyte *elem = (*env)->GetByteArrayElements(env, arr, 0);
+    for (int i = 0; i < 8; i++) {
         elem[i] = obj.Data4[i];
     }
-    env->ReleaseByteArrayElements(arr, elem, 0);
-    return env->NewObject(guidClass, guidClassCtor, obj.Data1, obj.Data2, obj.Data3, arr);
+    (*env)->ReleaseByteArrayElements(env, arr, elem, 0);
+    return (*env)->NewObject(env, guidClass, guidClassCtor, obj.Data1, obj.Data2, obj.Data3, arr);
 }
 
 DOT11_ADHOC_CIPHER_ALGORITHM getCipherAlgorithm(JNIEnv *env, jobject type) {
-    return env->CallIntMethod(type, getCipherAlgorithmMethod);
-}
-
-jobject createCipherAlgorithm(JNIEnv *env, DOT11_ADHOC_CIPHER_ALGORITHM algo) {
-    return env->CallStaticObjectMethod(cipherAlogrithmClass, parseCipherAlgorithmMethod, (jint) algo);
+    return (DOT11_ADHOC_CIPHER_ALGORITHM) (*env)->CallIntMethod(env, type, getCipherAlgorithmMethod);
 }
 
 DOT11_ADHOC_AUTH_ALGORITHM getAuthAlgorithm(JNIEnv *env, jobject type) {
-    return env->CallIntMethod(type, getAuthAlgorithmMethod);
-}
-
-jobject createAuthAlgorithm(JNIEnv *env, DOT11_ADHOC_AUTH_ALGORITHM algo) {
-    return env->CallStaticObjectMethod(authAlogrithmClass, parseAuthAlgorithmMethod, (jint) algo);
+    return (DOT11_ADHOC_AUTH_ALGORITHM) (*env)->CallIntMethod(env, type, getAuthAlgorithmMethod);
 }
 
 jobject createNetwork(JNIEnv *env, IDot11AdHocNetwork *network) {
-    return env->NewObject(networkClass, networkCtor, (jlong) network);
+    return (*env)->NewObject(env, networkClass, networkCtor, (jlong) network);
 }
 
 jobject createSignalQuality(JNIEnv *env, long current, long max) {
-    return env->NewObject(signalQualityClass, signalQualityClassCtor, current, max);
+    return (*env)->NewObject(env, signalQualityClass, signalQualityClassCtor, current, max);
 }
 
 DOT11_ADHOC_CONNECT_FAIL_REASON getFailReason(JNIEnv *env, jobject o) {
-    return env->CallIntMethod(o, getFailReasonMethod);
+    return (DOT11_ADHOC_CONNECT_FAIL_REASON) (*env)->CallIntMethod(env, o, getFailReasonMethod);
 }
 
 jobject createFailReason(JNIEnv *env, DOT11_ADHOC_CONNECT_FAIL_REASON reason) {
-    return env->CallStaticObjectMethod(failReasonClass, parseFailReasonMethod, (jint) reason);
+    return (*env)->CallStaticObjectMethod(env, failReasonClass, parseFailReasonMethod, (jint) reason);
 }
 
 DOT11_ADHOC_NETWORK_CONNECTION_STATUS getConnectionStatus(JNIEnv *env, jobject o) {
-    return env->CallIntMethod(o, getConnectionStatusMethod);
+    return (DOT11_ADHOC_NETWORK_CONNECTION_STATUS) (*env)->CallIntMethod(env, o, getConnectionStatusMethod);
 }
 
 jobject createConnectionStatus(JNIEnv *env, DOT11_ADHOC_NETWORK_CONNECTION_STATUS reason) {
-    return env->CallStaticObjectMethod(connectionStatusClass, parseConnectionStatusMethod, (jint) reason);
+    return (*env)->CallStaticObjectMethod(env, connectionStatusClass, parseConnectionStatusMethod, (jint) reason);
 }
 
 jobject createList(JNIEnv *env) {
-    return env->NewObject(listClass, listCtor);
+    return (*env)->NewObject(env, listClass, listCtor);
 }
 
 void addObject(JNIEnv *env, jobject list, jobject toAdd) {
-    env->CallBooleanMethod(list, listAddMethod, toAdd);
+    (*env)->CallBooleanMethod(env, list, listAddMethod, toAdd);
 }
 
 #endif
