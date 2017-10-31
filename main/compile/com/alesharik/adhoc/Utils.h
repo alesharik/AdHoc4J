@@ -2,6 +2,7 @@
 #define adhoc4j_Utils_h
 
 #include <jni.h>
+#define INITGUID
 #include <adhoc.h>
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved);
