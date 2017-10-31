@@ -3,7 +3,7 @@
 out
 *.user
 *.autosave
-*.h
+`com_*.h
 build-*
 include
 cmake-build-*
