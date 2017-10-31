@@ -1,20 +1,22 @@
 cmake_minimum_required(VERSION 3.7.2)
-if (WIN32)
-    set(CMAKE_C_COMPILER "C:/MinGW/bin/gcc.exe")
-    set(CMAKE_CXX_COMPILER "C:/MinGW/bin/g++.exe")
-endif ()
+
 set(LANGUAGE CXX)
 project(adhoc4j)
 
 find_package(JNI REQUIRED)
 include_directories(${JNI_INCLUDE_DIRS})
 
+if (WIN32)
+    set(CMAKE_C_COMPILER "C:/MinGW/bin/gcc.exe")
+    set(CMAKE_CXX_COMPILER "C:/MinGW/bin/g++.exe")
+endif ()
+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES Utils.c AdHocManager.c AdHocInterface.c AdHocNetwork.c)
+set(SOURCE_FILES Utils.h Utils.cpp AdHocNetwork.cpp AdHocInterface.cpp AdHocManager.cpp)
 
 add_library(adhoc4j SHARED ${SOURCE_FILES})
 #include_directories($ENV{JAVA_HOME}/include)

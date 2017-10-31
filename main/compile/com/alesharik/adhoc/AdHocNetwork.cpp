@@ -2,16 +2,15 @@
 #define adhoc4j_AdHocNetwork
 
 #include "com_alesharik_adhoc_AdHocNetwork.h"
-#include <adhoc.h>
 
-#include "Utils.c"
+#include "Utils.h"
 
 JNIEXPORT void JNICALL Java_com_alesharik_adhoc_AdHocNetwork_connect(JNIEnv *env, jobject obj, jstring pass, jlong geoId, jboolean saveProfile, jboolean userSpecific) {
     IDot11AdHocNetwork *net = getNetwork(env, obj);
-    const char* data = (*env)->GetStringUTFChars(env, pass, 0);
-    HRESULT hresult = net->Connect(data, geoId, saveProfile, userSpecific);
+    const char* data = env->GetStringUTFChars(pass, 0);
+    HRESULT hresult = net->Connect((LPCWSTR) data, (LONG)geoId, (BOOLEAN)saveProfile, (BOOLEAN)userSpecific);
 
-    (*env)->ReleaseStringUTFChars(env, pass, data);
+    env->ReleaseStringUTFChars(pass, data);
     handleResult(env, hresult);
 }
 
@@ -36,34 +35,34 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getInterface(JNI
 }
 
 JNIEXPORT jstring JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getProfileName(JNIEnv *env, jobject obj) {
-    char **str;
+    WCHAR **str;
     handleResult(env, getNetwork(env, obj)->GetProfileName(str));
-    return (*env)->NewStringUTF(env, *str);
+    return env->NewStringUTF((char*) *str);
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getSecuritySettings(JNIEnv *env, jobject obj) {
     IDot11AdHocSecuritySettings **settings;
-    handleResult(env, getNetwork(env, obj)->GetSecuritySetting(settings)));
+    handleResult(env, getNetwork(env, obj)->GetSecuritySetting(settings));
     return createSecuritySettings(env, *settings);
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getSignalQuality(JNIEnv *env, jobject obj) {
-    long *cur;
-    long *max;
-    handleResult(env, getNetwork(env, obj)->GetSignalQuality(cur, max)));
+    ULONG *cur;
+    ULONG *max;
+    handleResult(env, getNetwork(env, obj)->GetSignalQuality(cur, max));
     return createSignalQuality(env, *cur, *max);
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getSignature(JNIEnv *env, jobject obj) {
     GUID *sig;
-    handleResult(env, getNetwork(env, obj)->GetSignature(sig)));
+    handleResult(env, getNetwork(env, obj)->GetSignature(sig));
     return createGuid(env, *sig);
 }
 
 JNIEXPORT jstring JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getSSID(JNIEnv *env, jobject obj) {
-    char **str;
+    WCHAR **str;
     handleResult(env, getNetwork(env, obj)->GetSSID(str));
-    return (*env)->NewStringUTF(env, *str);
+    return env->NewStringUTF((char*) *str);
 }
 
 JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocNetwork_getStatus(JNIEnv *env, jobject obj) {
