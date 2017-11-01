@@ -11,8 +11,8 @@ inline void AdHocManager_init() {
     GUID a = CLSID_Dot11AdHocManager;
     GUID b = IID_IDot11AdHocManager;
 
-    CoInitialize(NULL);
-    CoCreateInstance((REFCLSID) a,NULL,CLSCTX_INPROC_HANDLER ,(REFIID) b ,(void**)manager);
+    CoInitialize(nullptr);
+    CoCreateInstance((REFCLSID) a, nullptr,CLSCTX_INPROC_HANDLER ,(REFIID) b ,(void**)manager);
     CoUninitialize();
     AdHocManager_init_is = true;
 }
@@ -24,7 +24,7 @@ JNIEXPORT jobject JNICALL Java_com_alesharik_adhoc_AdHocManager_commit(JNIEnv *e
     jfieldID f = env->GetFieldID(clz, "pointer", "L");
     long netPointer = env->GetLongField(network, f);
     if(netPointer == 0) {
-        return NULL;
+        return nullptr;
     }
     HRESULT result = manager->CommitCreatedNetwork((IDot11AdHocNetwork*) netPointer, saveNetwork, userSpecific);
     handleResult(env, result);
