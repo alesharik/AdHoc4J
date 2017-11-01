@@ -71,7 +71,7 @@ task executeCmake(dependsOn: [copyNativeDir], type: Exec) {
     group = NATIVE_GROUP
 
     workingDir sourceSets.main.output.classesDir.toString() + '/' + nativesSrc
-    commandLine 'cmake', '. -G "MinGW Makefiles"'
+    commandLine 'cmake', '.'
 
     errorOutput = System.out
 }

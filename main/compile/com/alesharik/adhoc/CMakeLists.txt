@@ -3,6 +3,12 @@ cmake_minimum_required(VERSION 3.7.2)
 set(LANGUAGE CXX)
 project(adhoc4j)
 
+SET(CMAKE_SYSTEM_NAME Windows)
+
+SET(CMAKE_C_COMPILER i686-w64-mingw32-gcc)
+SET(CMAKE_CXX_COMPILER i686-w64-mingw32-g++)
+SET(CMAKE_RC_COMPILER i686-w64-mingw32-windres)
+
 find_package(JNI REQUIRED)
 include_directories(${JNI_INCLUDE_DIRS})
 
@@ -29,4 +35,4 @@ if (UNIX)
 #    include_directories($ENV{JAVA_HOME}/include/linux)
     target_include_directories(adhoc4j PRIVATE include)
 endif ()
-target_link_libraries(adhoc4j)
+target_link_libraries(adhoc4j ole32 oleaut32)
