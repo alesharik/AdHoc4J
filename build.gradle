@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem;
+
 group 'com.alesharik'
 version '1.0-SNAPSHOT'
 
@@ -71,7 +73,10 @@ task executeCmake(dependsOn: [copyNativeDir], type: Exec) {
     group = NATIVE_GROUP
 
     workingDir sourceSets.main.output.classesDir.toString() + '/' + nativesSrc
-    commandLine 'cmake', '.'
+    if(OperatingSystem.current().isLinux())
+        commandLine 'cmake', '.', '-DCMAKE_TOOLCHAIN_FILE=' + new File("./cross-compile.cmake").getAbsolutePath()
+    else if(OperatingSystem.current().isWindows())
+        commandLine 'cmake', '.', '-G "MinGW Makefiles"'
 
     errorOutput = System.out
 }
@@ -81,7 +86,10 @@ task makeNatives(dependsOn: executeCmake, type: Exec) {
 
     workingDir sourceSets.main.output.classesDirs[0].toString() + '/' + nativesSrc
 
-    commandLine "make"
+    if(OperatingSystem.current().isLinux())
+        commandLine "make"
+    else if(OperatingSystem.current().isWindows())
+        commandLine 'mingw32-make'
 
     errorOutput = System.out
 }
